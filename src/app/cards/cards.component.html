@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-2" style="margin-top: 10px">
+    <button
+      style="margin-right: 10px; display: inline-block"
+      (click)="previousPage()"
+      [disabled]="params.page == 1"
+      class="btn btn-primary"
+    >
+      Previous
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="nextPage()"
+      [disabled]="params.page >= count / params.pageSize"
+    >
+      Next
+    </button>
+  </div>
+  <div class="col-5">
+    <app-page-sizing
+      [page]="params.page"
+      [pageSize]="params.pageSize"
+      [collectionSize]="count"
+      (emmiter)="pageSize($event)"
+    ></app-page-sizing>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-8">
+    <div class="row" *ngFor="let ca of cardsList.results">
+      <div class="col-2">
+        <p>
+          <img src="{{ ca.image }}" alt="" />
+        </p>
+      </div>
+      <div class="col-5">
+        <a [routerLink]="['/cards/', ca._id]">
+          {{ ca.title }}
+        </a>
+
+        <p [ngClass]="{ limitTextHeight: isReadMore }">
+          {{ ca.description }}
+        </p>
+        <button type="button" (click)="showText()" class="btn btn-info">
+          {{ isReadMore ? "Read More" : "Read Less" }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="row">
+      <form [formGroup]="cardFormGroup">
+        <input
+          type="text"
+          placeholder="Name"
+          class="form-control"
+          name="author"
+          formControlName="author"
+        />
+        <textarea
+          style="margin-top: 10px"
+          name="comment"
+          placeholder="Comment"
+          id=""
+          cols="30"
+          rows="2"
+          class="form-control"
+          name="text"
+          formControlName="text"
+        ></textarea>
+        <button class="btn btn-primary" (click)="addCom()">Submit</button>
+      </form>
+      <div
+        class="col-12"
+        *ngFor="let com of commentList.results"
+        style="margin-top: 10px"
+      >
+        <h4>{{ com.author }}</h4>
+        <p>{{ com.date | date }}</p>
+        <p>
+          {{ com.text }}
+        </p>
+        <hr />
+      </div>
+    </div>
+  </div>
+</div>
